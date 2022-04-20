@@ -5,7 +5,7 @@ on:
   workflow_dispatch:
   repository_dispatch:
 jobs:
-  remote_build:
+  remote_check:
     runs-on: ubuntu-latest
     steps:
       - name: Check out my other private repo
@@ -70,31 +70,45 @@ jobs:
         run: flutter pub get
       - name: Build APK
         run: flutter build apk --debug
-  build_ios:
-    name: Build IOS
-    runs-on: macos-latest
-    needs: [remote_build]
+#  build_ios:
+#    name: Build IOS
+#    runs-on: macos-latest
+#    needs: [remote_build]
+#    steps:
+#      - name: Checkout
+#        uses: actions/checkout@v3
+#        with:
+#          repository: FA-Super-Team/fa_master
+#          token: ${{ secrets.TOKEN }}
+#          path: '.'
+#      - name: Get Flutter version
+#        id: get-flutter-version
+#        uses: zgosalvez/github-actions-get-flutter-version-env@v1
+#      - name: Setup Flutter
+#        uses: subosito/flutter-action@v2
+#        with:
+#          flutter-version: ${{ steps.get-flutter-version.outputs.version }}
+#          channel: 'stable'
+#          cache: true
+#          cache-key: ${{ env.cache-name }}-macos-latest-${{ steps.get-flutter-version.outputs.version }}
+#          cache-path: ${{ runner.tool_cache }}/flutter
+#        env:
+#          cache-name: flutter-cache
+#      - name: Pub Get
+#        run: flutter pub get
+#      - name: Build IPA
+#        run: flutter build ios --release --no-codesign
+  success_trigger:
+    name: Trigger Success Event
+    runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
+      - uses: actions/github-script@v6
         with:
-          repository: FA-Super-Team/fa_master
-          token: ${{ secrets.TOKEN }}
-          path: '.'
-      - name: Get Flutter version
-        id: get-flutter-version
-        uses: zgosalvez/github-actions-get-flutter-version-env@v1
-      - name: Setup Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          flutter-version: ${{ steps.get-flutter-version.outputs.version }}
-          channel: 'stable'
-          cache: true
-          cache-key: ${{ env.cache-name }}-macos-latest-${{ steps.get-flutter-version.outputs.version }}
-          cache-path: ${{ runner.tool_cache }}/flutter
-        env:
-          cache-name: flutter-cache
-      - name: Pub Get
-        run: flutter pub get
-      - name: Build IPA
-        run: flutter build ios --release --no-codesign
+          github-token: ${{ secrets.TOKEN }}
+          script: |
+            await github.rest.actions.createWorkflowDispatch({
+              owner: 'FA-Super-Team',
+              repo: 'fa_master',
+              workflow_id: 'listener.yml',
+              ref: 'master'
+            })

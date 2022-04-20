@@ -1,0 +1,85 @@
+name: Release
+on:
+  push:
+    tags:
+      - "release-v*.*.*"
+jobs:
+  build:
+    name: Build Artifacts and Release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Setup Java
+        uses: actions/setup-java@v2
+        with:
+          java-version: "11.x"
+          distribution: 'zulu'
+      - name: Get Flutter version
+        id: get-flutter-version
+        uses: zgosalvez/github-actions-get-flutter-version-env@v1
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ steps.get-flutter-version.outputs.version }}
+          channel: 'stable'
+          cache: true
+          cache-key: ${{ env.cache-name }}-ubuntu-latest-${{ steps.get-flutter-version.outputs.version }}
+          cache-path: ${{ runner.tool_cache }}/flutter
+          # cache-key: ${{ env.cache-name }}-ubuntu-latest-${{ steps.get-flutter-version.outputs.version }}-${{ hashFiles('code/pubspec.lock') }}
+        env:
+          cache-name: flutter-cache
+
+      - name: Decode android/neumodore_key.jks
+        run: echo "${{ secrets.KEYSTORE_JKS_PROD }}" | base64 --decode > android/keystore.jks
+
+      - name: Decode android/key.properties
+        run: echo "${{ secrets.KEY_PROPERTIES_PROD }}" | base64 --decode > android/key.properties
+
+      - name: Get Tag
+        uses: olegtarasov/get-tag@v2.1 # that generate $GIT_TAG_NAME env
+        id: tagName
+        with:
+          tagRegex: 'release-v([0-9]+.[0-9]+.[0-9]+\+[0-9]+)' # Optional. Returns specified group text as tag name. Full tag string is returned if regex is not defined.
+          tagRegexGroup: 1 # Optional. Default is 1.
+
+      - name: Replace YAML version with tag version
+        run: |
+          sed -i 's/99.99.99+99/'$GIT_TAG_NAME'/g' pubspec.yaml|
+          echo "Tag used version:"$GIT_TAG_NAME
+      - name: Pub Get Packages
+        run: flutter pub get
+
+      - name: Build APPBUNDLE
+        run: flutter build appbundle --release
+
+      - name: Create Github Release
+        uses: ncipollo/release-action@v1
+        with:
+          artifacts: "build/app/outputs/bundle/release/*.aab"
+          token: ${{ secrets.TOKEN }}
+
+      - name: Save APPBUNDLE to Artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: APPBUNDLE
+          path: build/app/outputs/bundle/release/app-release.aab
+  release_internal:
+    name: Release Artifacts to internal track
+    needs: [build]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Get APPBUNDLE from Artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: APPBUNDLE
+      - name: Release APPBUNDLE to internal track
+        uses: r0adkll/upload-google-play@v1
+        with:
+          serviceAccountJsonPlainText: ${{ secrets.GOOGLE_SERVICE_JSONKEY }}
+          packageName: com.fa.famaster
+          releaseFile: app-release.aab
+          track: internal
+          whatsNewDirectory: distribution/whatsnew
