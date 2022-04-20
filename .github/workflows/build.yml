@@ -1,7 +1,13 @@
 name: Build
 on:
   push:
+    paths-ignore:
+      - '**/README.md'
+      - '**/LICENSE'
   pull_request:
+    paths-ignore:
+      - '**/README.md'
+      - '**/LICENSE'
   workflow_dispatch:
   repository_dispatch:
 jobs:
