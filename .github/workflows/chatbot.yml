@@ -1,4 +1,4 @@
-name: Build
+name: Trigger Slack
 on:
   push:
     paths-ignore:
