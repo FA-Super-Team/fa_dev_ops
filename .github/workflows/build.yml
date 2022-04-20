@@ -13,3 +13,5 @@ jobs:
         with:
           repository: FA-Super-Team/fa_master
           token: ${{ secrets.TOKEN }}
+          path: '.'
+      - run: ls -la
