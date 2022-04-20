@@ -14,4 +14,27 @@ jobs:
           repository: FA-Super-Team/fa_master
           token: ${{ secrets.TOKEN }}
           path: '.'
-      - run: ls -la
+      - name: Get Flutter version
+        id: get-flutter-version
+        uses: zgosalvez/github-actions-get-flutter-version-env@v1
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ steps.get-flutter-version.outputs.version }}
+          channel: 'stable'
+          cache: true
+          cache-key: ${{ env.cache-name }}-ubuntu-latest-${{ steps.get-flutter-version.outputs.version }}
+          cache-path: ${{ runner.tool_cache }}/flutter
+          # cache-key: ${{ env.cache-name }}-ubuntu-latest-${{ steps.get-flutter-version.outputs.version }}-${{ hashFiles('code/pubspec.lock') }}
+        env:
+          cache-name: flutter-cache
+      - name: Flutter Version
+        run: flutter --version
+      - name: Pub Get
+        run: flutter pub get
+      - name: Analyze Code
+        continue-on-error: true
+        run: |
+          flutter analyze || echo passed
+      - name: Test
+        run: flutter test
