@@ -6,6 +6,7 @@ on:
   repository_dispatch:
 jobs:
   remote_check:
+
     runs-on: ubuntu-latest
     steps:
       - name: Check out my other private repo
@@ -101,6 +102,9 @@ jobs:
   success_trigger:
     name: Trigger Success Event
     runs-on: ubuntu-latest
+    needs: [build_android]
+    # needs: [build_android,build_ios]
+    if: needs.build_android.outcome == 'success' # && needs.build_ios.outcome == 'success'
     steps:
       - uses: actions/github-script@v6
         with:
@@ -109,6 +113,22 @@ jobs:
             await github.rest.actions.createWorkflowDispatch({
               owner: 'FA-Super-Team',
               repo: 'fa_master',
-              workflow_id: 'listener.yml',
+              workflow_id: 'success.yml',
+              ref: 'master'
+            })
+  failure_trigger:
+    name: Trigger Failure Event
+    runs-on: ubuntu-latest
+    needs: [build_android]
+    if: needs.build_android.outcome != 'success' # && needs.build_ios.outcome != 'success'
+    steps:
+      - uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.TOKEN }}
+          script: |
+            await github.rest.actions.createWorkflowDispatch({
+              owner: 'FA-Super-Team',
+              repo: 'fa_master',
+              workflow_id: 'failure.yml',
               ref: 'master'
             })
