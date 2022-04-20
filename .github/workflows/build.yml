@@ -6,7 +6,7 @@ on:
   repository_dispatch:
 jobs:
   remote_check:
-
+    name: Remote Check
     runs-on: ubuntu-latest
     steps:
       - name: Check out my other private repo
