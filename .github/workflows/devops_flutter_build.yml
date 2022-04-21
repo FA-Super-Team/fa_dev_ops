@@ -1,4 +1,4 @@
-name: Build
+name: Flutter Build
 on:
 #  push:
 #    paths-ignore:
@@ -18,12 +18,19 @@ on:
         type: string
         required: true
         description: The ref of repo which dev ops work in
+env:
+  ARTIFACT_MODE: |
+    ${{ github.event.inputs.ref }} == refs/heads/master
+    || ${{ github.event.inputs.ref }} =~ ^refs/heads/release.*
+    || ${{ github.event.inputs.ref }} =~ ^refs/heads/pre-release.*
+    || ${{ github.event.inputs.ref }} =~ ^refs/tags/pre-release-v[0-9]+\.[0-9]+\.[0-9]+$
+    || ${{ github.event.inputs.ref }} =~ ^refs/tags/release-v[0-9]+\.[0-9]+\.[0-9]+$
 jobs:
   remote_check:
     name: Remote Check
     runs-on: ubuntu-latest
     steps:
-      - name: Check out my other private repo
+      - name: Check out target repo
         uses: actions/checkout@v3
         with:
           repository: ${{ github.event.inputs.repo }}
@@ -56,6 +63,7 @@ jobs:
   build_android:
     name: Build Android
     runs-on: ubuntu-latest
+    if: ${{ !env.ARTIFACT_MODE }}
     needs: [remote_check]
     steps:
       - name: Checkout
@@ -87,6 +95,42 @@ jobs:
         run: flutter pub get
       - name: Build APK
         run: flutter build apk --debug
+  android_preview:
+    name: Build Preview APK Android
+    runs-on: ubuntu-latest
+    if: ${{ env.ARTIFACT_MODE }}
+    needs: [remote_check]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          repository: ${{ github.event.inputs.repo }}
+          ref: ${{ github.event.inputs.ref }}
+          token: ${{ secrets.TOKEN }}
+          path: '.'
+      - name: Setup Java
+        uses: actions/setup-java@v2
+        with:
+          distribution: 'zulu'
+          java-version: '11.x'
+      - name: Get Flutter version
+        id: get-flutter-version
+        uses: zgosalvez/github-actions-get-flutter-version-env@v1
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ steps.get-flutter-version.outputs.version }}
+          channel: 'stable'
+          cache: true
+          cache-key: ${{ env.cache-name }}-ubuntu-latest-${{ steps.get-flutter-version.outputs.version }}
+          cache-path: ${{ runner.tool_cache }}/flutter
+        env:
+          cache-name: flutter-cache
+      - name: Pub Get
+        run: flutter pub get
+      - name: Build APK
+        run: flutter build apk --debug
+
 #  build_ios:
 #    name: Build IOS
 #    runs-on: macos-latest
