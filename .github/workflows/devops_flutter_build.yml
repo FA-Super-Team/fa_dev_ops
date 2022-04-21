@@ -63,7 +63,7 @@ jobs:
   build_android:
     name: Build Android
     runs-on: ubuntu-latest
-    if: ${{ !env.ARTIFACT_MODE }}
+    if: ${{ env.ARTIFACT_MODE == true }}
     needs: [remote_check]
     steps:
       - name: Checkout
