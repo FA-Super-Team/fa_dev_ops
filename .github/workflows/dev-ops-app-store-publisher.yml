@@ -5,4 +5,6 @@ jobs:
   remote_check:
     name: Remote Check
     runs-on: macos-latest
+    steps:
+      - run: echo OK
 # Download release build then add additional info for publishing
