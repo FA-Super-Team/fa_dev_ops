@@ -18,8 +18,6 @@ on:
         type: string
         required: true
         description: The ref of repo which dev ops work in
-env:
-  TOKEN: ${{ secrets.TOKEN }}
 jobs:
   remote_check:
     name: Remote Check
@@ -30,7 +28,7 @@ jobs:
         with:
           repository: ${{ github.event.inputs.repo }}
           ref: ${{ github.event.inputs.ref }}
-          token: $TOKEN
+          token: ${{ secrets.TOKEN }}
           path: '.'
       - name: Get Flutter version
         id: get-flutter-version
@@ -65,7 +63,7 @@ jobs:
         with:
           repository: ${{ github.event.inputs.repo }}
           ref: ${{ github.event.inputs.ref }}
-          token: $TOKEN
+          token: ${{ secrets.TOKEN }}
           path: '.'
       - name: Setup Java
         uses: actions/setup-java@v2
@@ -99,7 +97,7 @@ jobs:
 #        with:
 #          repository: ${{ github.event.inputs.repo }}
 #          ref: ${{ github.event.inputs.ref }}
-#          token: $TOKEN
+#          token: ${{ secrets.TOKEN }}
 #          path: '.'
 #      - name: Get Flutter version
 #        id: get-flutter-version
