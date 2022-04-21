@@ -15,7 +15,7 @@ jobs:
     name: Send Message To Slack
     runs-on: ubuntu-latest
     steps:
-      - name: Send custom JSON data to Slack workflow
+      - name: Send custom JSON data to Slack workflows
         id: slack
         uses: slackapi/slack-github-action@v1.18.0
         with:

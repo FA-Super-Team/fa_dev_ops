@@ -1,0 +1,120 @@
+name: Build
+on:
+#  push:
+#    paths-ignore:
+#      - '**/README.md'
+#      - '**/LICENSE'
+#  pull_request:
+#    paths-ignore:
+#      - '**/README.md'
+#      - '**/LICENSE'
+  workflow_dispatch:
+    inputs:
+      repo:
+        type: string
+        required: true
+        description: The repo which dev ops work in
+      ref:
+        type: string
+        required: true
+        description: The ref of repo which dev ops work in
+env:
+  TOKEN: ${{ secrets.TOKEN }}
+jobs:
+  remote_check:
+    name: Remote Check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out my other private repo
+        uses: actions/checkout@v3
+        with:
+          repository: ${{ github.event.inputs.repo }}
+          ref: ${{ github.event.inputs.ref }}
+          token: $TOKEN
+          path: '.'
+      - name: Get Flutter version
+        id: get-flutter-version
+        uses: zgosalvez/github-actions-get-flutter-version-env@v1
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ steps.get-flutter-version.outputs.version }}
+          channel: 'stable'
+          cache: true
+          cache-key: ${{ env.cache-name }}-ubuntu-latest-${{ steps.get-flutter-version.outputs.version }}
+          cache-path: ${{ runner.tool_cache }}/flutter
+        env:
+          cache-name: flutter-cache
+      - name: Flutter Version
+        run: flutter --version
+      - name: Pub Get
+        run: flutter pub get
+      - name: Analyze Code
+        continue-on-error: true
+        run: |
+          flutter analyze || echo passed
+      - name: Test
+        run: flutter test
+  build_android:
+    name: Build Android
+    runs-on: ubuntu-latest
+    needs: [remote_check]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          repository: ${{ github.event.inputs.repo }}
+          ref: ${{ github.event.inputs.ref }}
+          token: $TOKEN
+          path: '.'
+      - name: Setup Java
+        uses: actions/setup-java@v2
+        with:
+          distribution: 'zulu'
+          java-version: '11.x'
+      - name: Get Flutter version
+        id: get-flutter-version
+        uses: zgosalvez/github-actions-get-flutter-version-env@v1
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ steps.get-flutter-version.outputs.version }}
+          channel: 'stable'
+          cache: true
+          cache-key: ${{ env.cache-name }}-ubuntu-latest-${{ steps.get-flutter-version.outputs.version }}
+          cache-path: ${{ runner.tool_cache }}/flutter
+        env:
+          cache-name: flutter-cache
+      - name: Pub Get
+        run: flutter pub get
+      - name: Build APK
+        run: flutter build apk --debug
+#  build_ios:
+#    name: Build IOS
+#    runs-on: macos-latest
+#    needs: [remote_check]
+#    steps:
+#      - name: Checkout
+#        uses: actions/checkout@v3
+#        with:
+#          repository: ${{ github.event.inputs.repo }}
+#          ref: ${{ github.event.inputs.ref }}
+#          token: $TOKEN
+#          path: '.'
+#      - name: Get Flutter version
+#        id: get-flutter-version
+#        uses: zgosalvez/github-actions-get-flutter-version-env@v1
+#      - name: Setup Flutter
+#        uses: subosito/flutter-action@v2
+#        with:
+#          flutter-version: ${{ steps.get-flutter-version.outputs.version }}
+#          channel: 'stable'
+#          cache: true
+#          cache-key: ${{ env.cache-name }}-macos-latest-${{ steps.get-flutter-version.outputs.version }}
+#          cache-path: ${{ runner.tool_cache }}/flutter
+#        env:
+#          cache-name: flutter-cache
+#      - name: Pub Get
+#        run: flutter pub get
+#      - name: Build IPA
+#        run: flutter build ios --release --no-codesign
