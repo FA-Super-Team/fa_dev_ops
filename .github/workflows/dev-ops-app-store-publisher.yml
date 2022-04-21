@@ -1,0 +1,8 @@
+name: Flutter Release
+on:
+  workflow_dispatch:
+jobs:
+  remote_check:
+    name: Remote Check
+    runs-on: macos-latest
+# Download release build then add additional info for publishing
