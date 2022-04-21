@@ -82,12 +82,12 @@ jobs:
       - name: Pub Get
         run: flutter pub get
       - name: Build APK
-        run: flutter build appbundle --build-name=app-release-${{ github.event.inputs.ref }}
+        run: flutter build appbundle
       - name: Upload Artifacts
         uses: actions/upload-artifact@v3
         with:
-          name: release-appbundle-${{ github.event.inputs.ref }}
-          path: build/app/outputs/apk/release/*.apk
+          name: release-appbundle-${{ github.event.inputs.ref_name }}-v${{ github.run_number }}-no.${{ github.run_id }}
+          path: build/app/outputs/apk/release/*.aab
   build_android:
     name: Build Release APK Android
     runs-on: ubuntu-latest
@@ -121,11 +121,11 @@ jobs:
       - name: Pub Get
         run: flutter pub get
       - name: Build APK
-        run: flutter build apk --build-name=app-release-${{ github.event.inputs.ref }}
+        run: flutter build apk
       - name: Upload Artifacts
         uses: actions/upload-artifact@v3
         with:
-          name: release-apk-${{ github.event.inputs.ref }}
+          name: release-apk-${{ github.event.inputs.ref_name }}-v${{ github.run_number }}-no.${{ github.run_id }}
           path: build/app/outputs/apk/release/*.apk
   build_splited_android:
     name: Build Release Splited APK Android
@@ -160,9 +160,9 @@ jobs:
       - name: Pub Get
         run: flutter pub get
       - name: Build Splited APKs
-        run: flutter build apk --split-per-abi --build-name=app-release-${{ github.event.inputs.ref }}
+        run: flutter build apk --split-per-abi
       - name: Upload Artifacts
         uses: actions/upload-artifact@v3
         with:
-          name: splited-release-apks-${{ github.event.inputs.ref }}
+          name: splited-release-apks-${{ github.event.inputs.ref_name }}-v${{ github.run_number }}-no.${{ github.run_id }}
           path: build/app/outputs/apk/release/*.apk

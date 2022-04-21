@@ -82,11 +82,11 @@ jobs:
       - name: Pub Get
         run: flutter pub get
       - name: Build APK
-        run: flutter build apk --build-name=app-preview
+        run: flutter build apk --build-name=v${{ github.run_number }}.0.0-preview --build-number=${{ github.run_number }}
       - name: Upload Artifacts
         uses: actions/upload-artifact@v3
         with:
-          name: preview-apk
+          name: preview-apk-v${{ github.run_number }}-no.${{ github.run_id }}
           path: build/app/outputs/apk/release/*.apk
   build_splited_android:
     name: Build Preview Splited APKs Android
@@ -121,9 +121,9 @@ jobs:
       - name: Pub Get
         run: flutter pub get
       - name: Build Splited APKs
-        run: flutter build apk --split-per-abi --build-name=app-preview
+        run: flutter build apk --split-per-abi --build-name=v${{ github.run_number }}.0.0-preview --build-number=${{ github.run_number }}
       - name: Upload Artifacts
         uses: actions/upload-artifact@v3
         with:
-          name: splited-preview-apks
+          name: splited-preview-apks-v${{ github.run_number }}-no.${{ github.run_id }}
           path: build/app/outputs/apk/release/*.apk
