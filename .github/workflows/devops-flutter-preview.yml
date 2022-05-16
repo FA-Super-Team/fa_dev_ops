@@ -1,4 +1,4 @@
-name: Flutter Preview ${{ github.event.inputs.ref_name }}
+name: Flutter Preview
 on:
   workflow_dispatch:
     inputs:
