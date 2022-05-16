@@ -17,6 +17,7 @@ on:
 jobs:
   remote_check:
     name: Remote Check ${{ github.event.inputs.ref_name }}
+    if: github.event.inputs.ref_name != 'master-ta'
     runs-on: ubuntu-latest
     steps:
       - name: Check out target repo
