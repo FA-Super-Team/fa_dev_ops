@@ -16,7 +16,7 @@ on:
         description: The ref of repo which dev ops work in
 jobs:
   remote_check:
-    name: Remote Check
+    name: Remote Check ${{ github.event.inputs.ref_name }}
     runs-on: ubuntu-latest
     steps:
       - name: Check out target repo
@@ -50,7 +50,7 @@ jobs:
       - name: Test
         run: flutter test
   build_android:
-    name: Build Android
+    name: Build Android ${{ github.event.inputs.ref_name }}
     runs-on: ubuntu-latest
     needs: [remote_check]
     steps:
