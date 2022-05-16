@@ -1,4 +1,4 @@
-name: Flutter Preview
+name: Flutter Preview (TA)
 on:
   workflow_dispatch:
     inputs:
@@ -17,6 +17,7 @@ on:
 jobs:
   remote_check:
     name: Remote Check ${{ github.event.inputs.ref_name }}
+    if: github.event.inputs.ref_name == 'master-ta'
     runs-on: ubuntu-latest
     steps:
       - name: Check out target repo
@@ -49,9 +50,9 @@ jobs:
           flutter analyze || echo passed
       - name: Test
         run: flutter test
-  build_android:
-    name: Build Preview APK Android
-    if: github.event.inputs.ref_name != 'master-ta'
+  build_android_ta:
+    name: Build Preview APK Android (TA)
+    if: github.event.inputs.ref_name == 'master-ta'
     runs-on: ubuntu-latest
     needs: [remote_check]
     steps:
@@ -89,9 +90,9 @@ jobs:
         with:
           name: ${{ github.event.inputs.ref_name }}-preview-apk-v${{ github.run_number }}-no.${{ github.run_id }}
           path: build/app/outputs/apk/release/*.apk
-  build_splited_android:
-    name: Build Preview Splited APKs Android
-    if: github.event.inputs.ref_name != 'master-ta'
+  build_splited_android_ta:
+    name: Build Preview Splited APKs Android (TA)
+    if: github.event.inputs.ref_name == 'master-ta'
     runs-on: ubuntu-latest
     needs: [remote_check]
     steps:
