@@ -82,7 +82,7 @@ jobs:
       - name: Pub Get
         run: flutter pub get
       - name: Build APK
-        run: flutter build appbundle
+        run: flutter build appbundle --dart-define=ENV=PROD
       - name: Upload Artifacts
         uses: actions/upload-artifact@v3
         with:
@@ -121,7 +121,7 @@ jobs:
       - name: Pub Get
         run: flutter pub get
       - name: Build APK
-        run: flutter build apk
+        run: flutter build apk --dart-define=ENV=PROD
       - name: Upload Artifacts
         uses: actions/upload-artifact@v3
         with:
@@ -160,7 +160,7 @@ jobs:
       - name: Pub Get
         run: flutter pub get
       - name: Build Splited APKs
-        run: flutter build apk --split-per-abi
+        run: flutter build apk --split-per-abi --dart-define=ENV=PROD
       - name: Upload Artifacts
         uses: actions/upload-artifact@v3
         with:
