@@ -84,7 +84,7 @@ jobs:
       - name: Build APK
         run: flutter build apk --debug
   build_ios:
-    name: Build IOS
+    name: Build IOS ${{ github.event.inputs.ref_name }}
     runs-on: macos-latest
     needs: [remote_check]
     steps:
