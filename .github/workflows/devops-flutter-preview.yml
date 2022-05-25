@@ -205,3 +205,71 @@ jobs:
         with:
           name: prod-${{ github.event.inputs.ref_name }}-splited-preview-apks-v${{ github.run_number }}-no.${{ github.run_id }}
           path: build/app/outputs/apk/release/*.apk
+  build_ios_no_code_sign_dev:
+    name: Build IOS No Code Sign Dev ${{ github.event.inputs.ref_name }}
+    runs-on: macos-latest
+    needs: [remote_check]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          repository: ${{ github.event.inputs.repo }}
+          ref: ${{ github.event.inputs.ref }}
+          token: ${{ secrets.TOKEN }}
+          path: '.'
+      - name: Get Flutter version
+        id: get-flutter-version
+        uses: zgosalvez/github-actions-get-flutter-version-env@v1
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ steps.get-flutter-version.outputs.version }}
+          channel: 'stable'
+          cache: true
+          cache-key: ${{ env.cache-name }}-ubuntu-latest-${{ steps.get-flutter-version.outputs.version }}
+          cache-path: ${{ runner.tool_cache }}/flutter
+        env:
+          cache-name: flutter-cache
+      - name: Pub Get
+        run: flutter pub get
+      - name: Build IPA
+        run: flutter build ios --release --no-codesign --build-name=v${{ github.run_number }}.0.0-preview-dev --build-number=${{ github.run_number }} --dart-define=ENV=DEV
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: dev-${{ github.event.inputs.ref_name }}-preview-ios-v${{ github.run_number }}-no.${{ github.run_id }}
+          path: /Users/runner/work/fa_dev_ops/fa_dev_ops/build/ios/iphoneos/*.app
+  build_ios_no_code_sign_prod:
+    name: Build IOS No Code Sign Prod ${{ github.event.inputs.ref_name }}
+    runs-on: macos-latest
+    needs: [remote_check]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          repository: ${{ github.event.inputs.repo }}
+          ref: ${{ github.event.inputs.ref }}
+          token: ${{ secrets.TOKEN }}
+          path: '.'
+      - name: Get Flutter version
+        id: get-flutter-version
+        uses: zgosalvez/github-actions-get-flutter-version-env@v1
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ steps.get-flutter-version.outputs.version }}
+          channel: 'stable'
+          cache: true
+          cache-key: ${{ env.cache-name }}-ubuntu-latest-${{ steps.get-flutter-version.outputs.version }}
+          cache-path: ${{ runner.tool_cache }}/flutter
+        env:
+          cache-name: flutter-cache
+      - name: Pub Get
+        run: flutter pub get
+      - name: Build IPA
+        run: flutter build ios --release --no-codesign --build-name=v${{ github.run_number }}.0.0-preview --build-number=${{ github.run_number }} --dart-define=ENV=PROD
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: prod-${{ github.event.inputs.ref_name }}-preview-ios-v${{ github.run_number }}-no.${{ github.run_id }}
+          path: /Users/runner/work/fa_dev_ops/fa_dev_ops/build/ios/iphoneos/*.app
