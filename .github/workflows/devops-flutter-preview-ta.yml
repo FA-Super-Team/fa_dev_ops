@@ -267,7 +267,7 @@ jobs:
       - name: Pub Get
         run: flutter pub get
       - name: Build IPA
-        run: flutter build ipa --release --no-codesign --build-name=v${{ github.run_number }}.0.0-preview-dev --build-number=${{ github.run_number }} --dart-define=ENV=DEV
+        run: flutter build ipa --release --build-name=v${{ github.run_number }}.0.0-preview-dev --build-number=${{ github.run_number }} --dart-define=ENV=DEV
       - name: Upload IPA Artifacts
         uses: actions/upload-artifact@v3
         with:
@@ -340,7 +340,7 @@ jobs:
       - name: Pub Get
         run: flutter pub get
       - name: Build IPA
-        run: flutter build ipa --release --no-codesign --build-name=v${{ github.run_number }}.0.0-preview --build-number=${{ github.run_number }} --dart-define=ENV=PROD
+        run: flutter build ipa --release --build-name=v${{ github.run_number }}.0.0-preview --build-number=${{ github.run_number }} --dart-define=ENV=PROD
       - name: Upload IPA Artifacts
         uses: actions/upload-artifact@v3
         with:

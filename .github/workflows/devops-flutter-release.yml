@@ -228,7 +228,7 @@ jobs:
       - name: Pub Get
         run: flutter pub get
       - name: Build IPA
-        run: flutter build ipa --release --no-codesign --dart-define=ENV=PROD
+        run: flutter build ipa --release --dart-define=ENV=PROD
       - name: Upload IPA Artifacts
         uses: actions/upload-artifact@v3
         with:
