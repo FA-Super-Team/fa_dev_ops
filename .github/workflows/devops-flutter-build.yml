@@ -82,7 +82,12 @@ jobs:
       - name: Pub Get
         run: flutter pub get
       - name: Build APK
-        run: flutter build apk --debug
+        run: flutter build apk --debug --build-name=v${{ github.run_number }}.0.0-preview-debug --build-number=${{ github.run_number }} --dart-define=ENV=DEV
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: debug-${{ github.event.inputs.ref_name }}-preview-apk-v${{ github.run_number }}-no.${{ github.run_id }}
+          path: build/app/outputs/flutter-apk/*.apk
   build_ios:
     name: Build IOS ${{ github.event.inputs.ref_name }}
     runs-on: macos-latest
