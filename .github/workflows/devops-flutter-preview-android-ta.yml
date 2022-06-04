@@ -82,9 +82,9 @@ jobs:
       - name: Pub Get
         run: flutter pub get
       - name: Pub Get Rename Package
-        run: flutter pub global activate rename
+        run: flutter pub add --dev rename_app
       - name: Rename App
-        run: flutter pub global run rename --appname "FA Master DTA"
+        run: flutter pub run rename_app:main all="FA Master DTA"
       - name: Build APK
         run: flutter build apk --debug --build-name=${{ github.run_number }}.0.0-preview-debug --build-number=${{ github.run_number }} --dart-define=ENV=DEV
       - name: Upload Artifacts
@@ -125,9 +125,9 @@ jobs:
       - name: Pub Get
         run: flutter pub get
       - name: Pub Get Rename Package
-        run: flutter pub global activate rename
+        run: flutter pub add --dev rename_app
       - name: Rename App
-        run: flutter pub global run rename --appname "FA Master PDTA"
+        run: flutter pub run rename_app:main all="FA Master PDTA"
       - name: Build APK
         run: flutter build apk --build-name=${{ github.run_number }}.0.0-preview-dev --build-number=${{ github.run_number }} --dart-define=ENV=DEV
       - name: Upload Artifacts
@@ -168,9 +168,9 @@ jobs:
       - name: Pub Get
         run: flutter pub get
       - name: Pub Get Rename Package
-        run: flutter pub global activate rename
+        run: flutter pub add --dev rename_app
       - name: Rename App
-        run: flutter pub global run rename --appname "FA Master PPTA"
+        run: flutter pub run rename_app:main all="FA Master PPTA"
       - name: Build APK
         run: flutter build apk --build-name=${{ github.run_number }}.0.0-preview --build-number=${{ github.run_number }} --dart-define=ENV=PROD
       - name: Upload Artifacts
@@ -211,9 +211,9 @@ jobs:
       - name: Pub Get
         run: flutter pub get
       - name: Pub Get Rename Package
-        run: flutter pub global activate rename
+        run: flutter pub add --dev rename_app
       - name: Rename App
-        run: flutter pub global run rename --appname "FA Master PDTA"
+        run: flutter pub run rename_app:main all="FA Master PDTA"
       - name: Build Splited APKs
         run: flutter build apk --split-per-abi --build-name=${{ github.run_number }}.0.0-preview-dev --build-number=${{ github.run_number }} --dart-define=ENV=DEV
       - name: Upload Artifacts
@@ -254,9 +254,9 @@ jobs:
       - name: Pub Get
         run: flutter pub get
       - name: Pub Get Rename Package
-        run: flutter pub global activate rename
+        run: flutter pub add --dev rename_app
       - name: Rename App
-        run: flutter pub global run rename --appname "FA Master PPTA"
+        run: flutter pub run rename_app:main all="FA Master PPTA"
       - name: Build Splited APKs
         run: flutter build apk --split-per-abi --build-name=${{ github.run_number }}.0.0-preview --build-number=${{ github.run_number }} --dart-define=ENV=PROD
       - name: Upload Artifacts
