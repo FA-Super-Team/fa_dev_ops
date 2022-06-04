@@ -81,6 +81,10 @@ jobs:
           cache-name: flutter-cache
       - name: Pub Get
         run: flutter pub get
+      - name: Pub Get Rename Package
+        run: flutter pub global activate rename
+      - name: Rename App
+        run: flutter pub global run rename --appname "FA Master D"
       - name: Build APK
         run: flutter build apk --debug --build-name=${{ github.run_number }}.0.0-preview-debug --build-number=${{ github.run_number }} --dart-define=ENV=DEV
       - name: Upload Artifacts

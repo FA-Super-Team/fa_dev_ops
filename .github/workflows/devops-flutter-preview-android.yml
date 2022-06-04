@@ -81,6 +81,10 @@ jobs:
           cache-name: flutter-cache
       - name: Pub Get
         run: flutter pub get
+      - name: Pub Get Rename Package
+        run: flutter pub global activate rename
+      - name: Rename App
+        run: flutter pub global run rename --appname "FA Master D"
       - name: Build APK
         run: flutter build apk --debug --build-name=${{ github.run_number }}.0.0-preview-debug --build-number=${{ github.run_number }} --dart-define=ENV=DEV
       - name: Upload Artifacts
@@ -120,6 +124,10 @@ jobs:
           cache-name: flutter-cache
       - name: Pub Get
         run: flutter pub get
+      - name: Pub Get Rename Package
+        run: flutter pub global activate rename
+      - name: Rename App
+        run: flutter pub global run rename --appname "FA Master PD"
       - name: Build APK
         run: flutter build apk --build-name=${{ github.run_number }}.0.0-preview-dev --build-number=${{ github.run_number }} --dart-define=ENV=DEV
       - name: Upload Artifacts
@@ -159,6 +167,10 @@ jobs:
           cache-name: flutter-cache
       - name: Pub Get
         run: flutter pub get
+      - name: Pub Get Rename Package
+        run: flutter pub global activate rename
+      - name: Rename App
+        run: flutter pub global run rename --appname "FA Master PP"
       - name: Build APK
         run: flutter build apk --build-name=${{ github.run_number }}.0.0-preview --build-number=${{ github.run_number }} --dart-define=ENV=PROD
       - name: Upload Artifacts
@@ -198,6 +210,10 @@ jobs:
           cache-name: flutter-cache
       - name: Pub Get
         run: flutter pub get
+      - name: Pub Get Rename Package
+        run: flutter pub global activate rename
+      - name: Rename App
+        run: flutter pub global run rename --appname "FA Master PD"
       - name: Build Splited APKs
         run: flutter build apk --split-per-abi --build-name=${{ github.run_number }}.0.0-preview-dev --build-number=${{ github.run_number }} --dart-define=ENV=DEV
       - name: Upload Artifacts
@@ -237,6 +253,10 @@ jobs:
           cache-name: flutter-cache
       - name: Pub Get
         run: flutter pub get
+      - name: Pub Get Rename Package
+        run: flutter pub global activate rename
+      - name: Rename App
+        run: flutter pub global run rename --appname "FA Master PP"
       - name: Build Splited APKs
         run: flutter build apk --split-per-abi --build-name=${{ github.run_number }}.0.0-preview --build-number=${{ github.run_number }} --dart-define=ENV=PROD
       - name: Upload Artifacts
