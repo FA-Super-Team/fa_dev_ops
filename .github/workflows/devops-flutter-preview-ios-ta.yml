@@ -1,0 +1,197 @@
+name: Flutter Preview IOS (TA)
+on:
+  workflow_dispatch:
+    inputs:
+      repo:
+        type: string
+        required: true
+        description: The repo which dev ops work in
+      ref_name:
+        type: string
+        required: true
+        description: The ref name of repo which dev ops work in
+      ref:
+        type: string
+        required: true
+        description: The ref of repo which dev ops work in
+jobs:
+  remote_check_ta:
+    name: Remote Check ${{ github.event.inputs.ref_name }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out target repo
+        uses: actions/checkout@v3
+        with:
+          repository: ${{ github.event.inputs.repo }}
+          ref: ${{ github.event.inputs.ref }}
+          token: ${{ secrets.TOKEN }}
+          path: '.'
+      - name: Get Flutter version
+        id: get-flutter-version
+        uses: zgosalvez/github-actions-get-flutter-version-env@v1
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ steps.get-flutter-version.outputs.version }}
+          channel: 'stable'
+          cache: true
+          cache-key: ${{ env.cache-name }}-ubuntu-latest-${{ steps.get-flutter-version.outputs.version }}
+          cache-path: ${{ runner.tool_cache }}/flutter
+        env:
+          cache-name: flutter-cache
+      - name: Flutter Version
+        run: flutter --version
+      - name: Pub Get
+        run: flutter pub get
+      - name: Analyze Code
+        continue-on-error: true
+        run: |
+          flutter analyze || echo passed
+      - name: Test
+        run: flutter test
+  build_ios_no_code_sign_dev_ta:
+    name: Build IOS No Code Sign Dev (TA) ${{ github.event.inputs.ref_name }}
+    runs-on: macos-latest
+    needs: [remote_check_ta]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          repository: ${{ github.event.inputs.repo }}
+          ref: ${{ github.event.inputs.ref }}
+          token: ${{ secrets.TOKEN }}
+          path: '.'
+      - name: Get Flutter version
+        id: get-flutter-version
+        uses: zgosalvez/github-actions-get-flutter-version-env@v1
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ steps.get-flutter-version.outputs.version }}
+          channel: 'stable'
+          cache: true
+          cache-key: ${{ env.cache-name }}-ubuntu-latest-${{ steps.get-flutter-version.outputs.version }}
+          cache-path: ${{ runner.tool_cache }}/flutter
+        env:
+          cache-name: flutter-cache
+      - name: Pub Get
+        run: flutter pub get
+      - name: Build IPA
+        run: flutter build ios --release --no-codesign --build-name=${{ github.run_number }}.0.0-preview-dev --build-number=${{ github.run_number }} --dart-define=ENV=DEV
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: dev-${{ github.event.inputs.ref_name }}-preview-ios-v${{ github.run_number }}-no.${{ github.run_id }}
+          path: /Users/runner/work/fa_dev_ops/fa_dev_ops/build/ios/iphoneos/*.app
+#  build_ipa_no_code_sign_dev_ta:
+#    name: Build IPA No Code Sign Dev (TA) ${{ github.event.inputs.ref_name }}
+#    runs-on: macos-latest
+#    needs: [remote_check_ta]
+#    steps:
+#      - name: Checkout
+#        uses: actions/checkout@v3
+#        with:
+#          repository: ${{ github.event.inputs.repo }}
+#          ref: ${{ github.event.inputs.ref }}
+#          token: ${{ secrets.TOKEN }}
+#          path: '.'
+#      - name: Get Flutter version
+#        id: get-flutter-version
+#        uses: zgosalvez/github-actions-get-flutter-version-env@v1
+#      - name: Setup Flutter
+#        uses: subosito/flutter-action@v2
+#        with:
+#          flutter-version: ${{ steps.get-flutter-version.outputs.version }}
+#          channel: 'stable'
+#          cache: true
+#          cache-key: ${{ env.cache-name }}-ubuntu-latest-${{ steps.get-flutter-version.outputs.version }}
+#          cache-path: ${{ runner.tool_cache }}/flutter
+#        env:
+#          cache-name: flutter-cache
+#      - name: Pub Get
+#        run: flutter pub get
+#      - name: Build IPA
+#        run: flutter build ipa --release --build-name=${{ github.run_number }}.0.0-preview-dev --build-number=${{ github.run_number }} --dart-define=ENV=DEV
+#      - name: Upload IPA Artifacts
+#        uses: actions/upload-artifact@v3
+#        with:
+#          name: dev-${{ github.event.inputs.ref_name }}-preview-ios-v${{ github.run_number }}-no.${{ github.run_id }}
+#          path: /Users/runner/work/fa_dev_ops/fa_dev_ops/build/ios/ipa/*.ipa
+#      - name: Upload Xcarchive Artifacts
+#        uses: actions/upload-artifact@v3
+#        with:
+#          name: dev-${{ github.event.inputs.ref_name }}-preview-ios-v${{ github.run_number }}-no.${{ github.run_id }}
+#          path: /Users/runner/work/fa_dev_ops/fa_dev_ops/build/ios/archive/*.xcarchive
+  build_ios_no_code_sign_prod_ta:
+    name: Build IOS No Code Sign Prod (TA) ${{ github.event.inputs.ref_name }}
+    runs-on: macos-latest
+    needs: [remote_check_ta]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          repository: ${{ github.event.inputs.repo }}
+          ref: ${{ github.event.inputs.ref }}
+          token: ${{ secrets.TOKEN }}
+          path: '.'
+      - name: Get Flutter version
+        id: get-flutter-version
+        uses: zgosalvez/github-actions-get-flutter-version-env@v1
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ steps.get-flutter-version.outputs.version }}
+          channel: 'stable'
+          cache: true
+          cache-key: ${{ env.cache-name }}-ubuntu-latest-${{ steps.get-flutter-version.outputs.version }}
+          cache-path: ${{ runner.tool_cache }}/flutter
+        env:
+          cache-name: flutter-cache
+      - name: Pub Get
+        run: flutter pub get
+      - name: Build IPA
+        run: flutter build ios --release --no-codesign --build-name=${{ github.run_number }}.0.0-preview --build-number=${{ github.run_number }} --dart-define=ENV=PROD
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: prod-${{ github.event.inputs.ref_name }}-preview-ios-v${{ github.run_number }}-no.${{ github.run_id }}
+          path: /Users/runner/work/fa_dev_ops/fa_dev_ops/build/ios/iphoneos/*.app
+#  build_ipa_no_code_sign_prod_ta:
+#    name: Build IPA No Code Sign Prod (TA) ${{ github.event.inputs.ref_name }}
+#    runs-on: macos-latest
+#    needs: [remote_check_ta]
+#    steps:
+#      - name: Checkout
+#        uses: actions/checkout@v3
+#        with:
+#          repository: ${{ github.event.inputs.repo }}
+#          ref: ${{ github.event.inputs.ref }}
+#          token: ${{ secrets.TOKEN }}
+#          path: '.'
+#      - name: Get Flutter version
+#        id: get-flutter-version
+#        uses: zgosalvez/github-actions-get-flutter-version-env@v1
+#      - name: Setup Flutter
+#        uses: subosito/flutter-action@v2
+#        with:
+#          flutter-version: ${{ steps.get-flutter-version.outputs.version }}
+#          channel: 'stable'
+#          cache: true
+#          cache-key: ${{ env.cache-name }}-ubuntu-latest-${{ steps.get-flutter-version.outputs.version }}
+#          cache-path: ${{ runner.tool_cache }}/flutter
+#        env:
+#          cache-name: flutter-cache
+#      - name: Pub Get
+#        run: flutter pub get
+#      - name: Build IPA
+#        run: flutter build ipa --release --build-name=${{ github.run_number }}.0.0-preview --build-number=${{ github.run_number }} --dart-define=ENV=PROD
+#      - name: Upload IPA Artifacts
+#        uses: actions/upload-artifact@v3
+#        with:
+#          name: prod-${{ github.event.inputs.ref_name }}-preview-ipa-v${{ github.run_number }}-no.${{ github.run_id }}
+#          path: /Users/runner/work/fa_dev_ops/fa_dev_ops/build/ios/ipa/*.ipa
+#      - name: Upload Xcarchive Artifacts
+#        uses: actions/upload-artifact@v3
+#        with:
+#          name: prod-${{ github.event.inputs.ref_name }}-preview-xcarchive-v${{ github.run_number }}-no.${{ github.run_id }}
+#          path: /Users/runner/work/fa_dev_ops/fa_dev_ops/build/ios/archive/*.xcarchive
