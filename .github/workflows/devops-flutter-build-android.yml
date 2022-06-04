@@ -86,5 +86,5 @@ jobs:
       - name: Upload Artifacts
         uses: actions/upload-artifact@v3
         with:
-          name: debug-${{ github.event.inputs.ref_name }}-preview-apk-v${{ github.run_number }}-no.${{ github.run_id }}
+          name: debug-preview-apk-v${{ github.run_number }}-no.${{ github.run_id }}
           path: build/app/outputs/flutter-apk/*.apk
