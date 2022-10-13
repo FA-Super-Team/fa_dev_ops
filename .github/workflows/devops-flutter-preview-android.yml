@@ -91,7 +91,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: debug-${{ github.event.inputs.ref_name }}-preview-apk-v${{ github.run_number }}-no.${{ github.run_id }}
-          path: build/app/outputs/flutter-apk/*.apk
+          path: build/app/outputs/flutter-apk/*release*.apk
   build_android_dev:
     name: Build Preview APK Android Dev ${{ github.event.inputs.ref_name }}
     runs-on: ubuntu-latest
@@ -134,7 +134,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: dev-${{ github.event.inputs.ref_name }}-preview-apk-v${{ github.run_number }}-no.${{ github.run_id }}
-          path: build/app/outputs/flutter-apk/*.apk
+          path: build/app/outputs/flutter-apk/*release*.apk
   build_android_prod:
     name: Build Preview APK Android Prod ${{ github.event.inputs.ref_name }}
     runs-on: ubuntu-latest
@@ -177,7 +177,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: prod-${{ github.event.inputs.ref_name }}-preview-apk-v${{ github.run_number }}-no.${{ github.run_id }}
-          path: build/app/outputs/flutter-apk/*.apk
+          path: build/app/outputs/flutter-apk/*release*.apk
   build_splited_android_dev:
     name: Build Preview Splited APKs Android Dev ${{ github.event.inputs.ref_name }}
     runs-on: ubuntu-latest
@@ -220,7 +220,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: dev-${{ github.event.inputs.ref_name }}-splited-preview-apks-v${{ github.run_number }}-no.${{ github.run_id }}
-          path: build/app/outputs/flutter-apk/*.apk
+          path: build/app/outputs/flutter-apk/*release*.apk
   build_splited_android_prod:
     name: Build Preview Splited APKs Android Prod ${{ github.event.inputs.ref_name }}
     runs-on: ubuntu-latest
@@ -263,4 +263,4 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: prod-${{ github.event.inputs.ref_name }}-splited-preview-apks-v${{ github.run_number }}-no.${{ github.run_id }}
-          path: build/app/outputs/flutter-apk/*.apk
+          path: build/app/outputs/flutter-apk/*release*.apk

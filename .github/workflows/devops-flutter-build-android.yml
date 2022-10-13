@@ -91,4 +91,4 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: debug-preview-apk-v${{ github.run_number }}-no.${{ github.run_id }}
-          path: build/app/outputs/flutter-apk/*.apk
+          path: build/app/outputs/flutter-apk/*debug*.apk

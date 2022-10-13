@@ -80,7 +80,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: PreviewAPK
-          path: build/app/outputs/flutter-apk/*.apk
+          path: build/app/outputs/flutter-apk/*release*.apk
   build_splited_android:
     name: Build Splited Android
     runs-on: ubuntu-latest
@@ -115,7 +115,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: SplitedPreviewAPKs
-          path: build/app/outputs/flutter-apk/*.apk
+          path: build/app/outputs/flutter-apk/*release*.apk
 
 #  Need Podfile to configure IOS version to build success
 #  build_ios:
