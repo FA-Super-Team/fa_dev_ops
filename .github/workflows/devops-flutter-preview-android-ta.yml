@@ -62,7 +62,7 @@ jobs:
           token: ${{ secrets.TOKEN }}
           path: '.'
       - name: Setup Java
-        uses: actions/setup-java@v2
+        uses: actions/setup-java@v3
         with:
           distribution: 'zulu'
           java-version: '11.x'
@@ -105,7 +105,7 @@ jobs:
           token: ${{ secrets.TOKEN }}
           path: '.'
       - name: Setup Java
-        uses: actions/setup-java@v2
+        uses: actions/setup-java@v3
         with:
           distribution: 'zulu'
           java-version: '11.x'
@@ -134,7 +134,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: dev-${{ github.event.inputs.ref_name }}-preview-apk-v${{ github.run_number }}-no.${{ github.run_id }}
-          path: build/app/outputs/apk/release/*.apk
+          path: build/app/outputs/flutter-apk/*.apk
   build_android_prod_ta:
     name: Build Preview APK Android Prod (TA) ${{ github.event.inputs.ref_name }}
     runs-on: ubuntu-latest
@@ -148,7 +148,7 @@ jobs:
           token: ${{ secrets.TOKEN }}
           path: '.'
       - name: Setup Java
-        uses: actions/setup-java@v2
+        uses: actions/setup-java@v3
         with:
           distribution: 'zulu'
           java-version: '11.x'
@@ -177,7 +177,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: prod-${{ github.event.inputs.ref_name }}-preview-apk-v${{ github.run_number }}-no.${{ github.run_id }}
-          path: build/app/outputs/apk/release/*.apk
+          path: build/app/outputs/flutter-apk/*.apk
   build_splited_android_dev_ta:
     name: Build Preview Splited APKs Android Dev (TA) ${{ github.event.inputs.ref_name }}
     runs-on: ubuntu-latest
@@ -191,7 +191,7 @@ jobs:
           token: ${{ secrets.TOKEN }}
           path: '.'
       - name: Setup Java
-        uses: actions/setup-java@v2
+        uses: actions/setup-java@v3
         with:
           distribution: 'zulu'
           java-version: '11.x'
@@ -220,7 +220,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: dev-${{ github.event.inputs.ref_name }}-splited-preview-apks-v${{ github.run_number }}-no.${{ github.run_id }}
-          path: build/app/outputs/apk/release/*.apk
+          path: build/app/outputs/flutter-apk/*.apk
   build_splited_android_prod_ta:
     name: Build Preview Splited APKs Android Prod (TA) ${{ github.event.inputs.ref_name }}
     runs-on: ubuntu-latest
@@ -234,7 +234,7 @@ jobs:
           token: ${{ secrets.TOKEN }}
           path: '.'
       - name: Setup Java
-        uses: actions/setup-java@v2
+        uses: actions/setup-java@v3
         with:
           distribution: 'zulu'
           java-version: '11.x'
@@ -263,4 +263,4 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: prod-${{ github.event.inputs.ref_name }}-splited-preview-apks-v${{ github.run_number }}-no.${{ github.run_id }}
-          path: build/app/outputs/apk/release/*.apk
+          path: build/app/outputs/flutter-apk/*.apk

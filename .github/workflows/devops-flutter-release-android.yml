@@ -62,7 +62,7 @@ jobs:
           token: ${{ secrets.TOKEN }}
           path: '.'
       - name: Setup Java
-        uses: actions/setup-java@v2
+        uses: actions/setup-java@v3
         with:
           distribution: 'zulu'
           java-version: '11.x'
@@ -101,7 +101,7 @@ jobs:
           token: ${{ secrets.TOKEN }}
           path: '.'
       - name: Setup Java
-        uses: actions/setup-java@v2
+        uses: actions/setup-java@v3
         with:
           distribution: 'zulu'
           java-version: '11.x'
@@ -126,7 +126,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: release-apk-${{ github.event.inputs.ref_name }}-v${{ github.run_number }}-no.${{ github.run_id }}
-          path: build/app/outputs/apk/release/*.apk
+          path: build/app/outputs/flutter-apk/*.apk
   build_splited_android:
     name: Build Release Splited APK Android ${{ github.event.inputs.ref_name }}
     runs-on: ubuntu-latest
@@ -140,7 +140,7 @@ jobs:
           token: ${{ secrets.TOKEN }}
           path: '.'
       - name: Setup Java
-        uses: actions/setup-java@v2
+        uses: actions/setup-java@v3
         with:
           distribution: 'zulu'
           java-version: '11.x'
@@ -165,4 +165,4 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: splited-release-apks-${{ github.event.inputs.ref_name }}-v${{ github.run_number }}-no.${{ github.run_id }}
-          path: build/app/outputs/apk/release/*.apk
+          path: build/app/outputs/flutter-apk/*.apk
