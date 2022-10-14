@@ -65,7 +65,7 @@ jobs:
         uses: actions/setup-java@v3
         with:
           distribution: 'zulu'
-          java-version: '11.x'
+          java-version: '17'
       - name: Get Flutter version
         id: get-flutter-version
         uses: zgosalvez/github-actions-get-flutter-version-env@v1
@@ -108,7 +108,7 @@ jobs:
         uses: actions/setup-java@v3
         with:
           distribution: 'zulu'
-          java-version: '11.x'
+          java-version: '17'
       - name: Get Flutter version
         id: get-flutter-version
         uses: zgosalvez/github-actions-get-flutter-version-env@v1
@@ -151,7 +151,7 @@ jobs:
         uses: actions/setup-java@v3
         with:
           distribution: 'zulu'
-          java-version: '11.x'
+          java-version: '17'
       - name: Get Flutter version
         id: get-flutter-version
         uses: zgosalvez/github-actions-get-flutter-version-env@v1
@@ -194,7 +194,7 @@ jobs:
         uses: actions/setup-java@v3
         with:
           distribution: 'zulu'
-          java-version: '11.x'
+          java-version: '17'
       - name: Get Flutter version
         id: get-flutter-version
         uses: zgosalvez/github-actions-get-flutter-version-env@v1
@@ -237,7 +237,7 @@ jobs:
         uses: actions/setup-java@v3
         with:
           distribution: 'zulu'
-          java-version: '11.x'
+          java-version: '17'
       - name: Get Flutter version
         id: get-flutter-version
         uses: zgosalvez/github-actions-get-flutter-version-env@v1
