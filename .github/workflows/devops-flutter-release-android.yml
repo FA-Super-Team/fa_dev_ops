@@ -87,7 +87,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: release-appbundle-${{ github.event.inputs.ref_name }}-v${{ github.run_number }}-no.${{ github.run_id }}
-          path: build/app/outputs/apk/release/*.aab
+          path: build/app/outputs/bundle/release/*.aab
   build_android:
     name: Build Release APK Android ${{ github.event.inputs.ref_name }}
     runs-on: ubuntu-latest
