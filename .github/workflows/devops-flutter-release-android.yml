@@ -28,7 +28,7 @@ jobs:
           path: '.'
       - name: Get Flutter version
         id: get-flutter-version
-        uses: zgosalvez/github-actions-get-flutter-version-env@v1
+        uses: zgosalvez/github-actions-get-flutter-version-env@v2
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
@@ -68,7 +68,7 @@ jobs:
           java-version: '11.x'
       - name: Get Flutter version
         id: get-flutter-version
-        uses: zgosalvez/github-actions-get-flutter-version-env@v1
+        uses: zgosalvez/github-actions-get-flutter-version-env@v2
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
@@ -107,7 +107,7 @@ jobs:
           java-version: '11.x'
       - name: Get Flutter version
         id: get-flutter-version
-        uses: zgosalvez/github-actions-get-flutter-version-env@v1
+        uses: zgosalvez/github-actions-get-flutter-version-env@v2
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
@@ -146,7 +146,7 @@ jobs:
           java-version: '11.x'
       - name: Get Flutter version
         id: get-flutter-version
-        uses: zgosalvez/github-actions-get-flutter-version-env@v1
+        uses: zgosalvez/github-actions-get-flutter-version-env@v2
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
